@@ -46,7 +46,7 @@ public class MainServerTest extends TestCase {
 		
 		try {
 			/* run the server */
-			MainServer.main(null);
+		//	MainServer.main(null);
 		} catch (Exception e) {
 			
 			this.setError(e.toString());
