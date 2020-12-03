@@ -987,11 +987,11 @@ public class CanvasController implements Initializable {
 				for(Pixel pix:pixels) {
 				Position pos = pix.position;
 				Color color = Color.color(
-		    			(double) pix.intensity.r / 255.0,
-		    			(double) pix.intensity.g / 255.0,
-		    			(double) pix.intensity.b / 255.0
+		    			(double) pix.intensity.r,
+		    			(double) pix.intensity.g,
+		    			(double) pix.intensity.b
 		    		);
-				gcForUpdate.getPixelWriter().setColor((int) pos.r,(int) pos.c,color);
+				gcForUpdate.getPixelWriter().setColor(pos.r,pos.c,color);
 			}
 			logger.log(ModuleID.UI, LogLevel.SUCCESS, "Canvas Updated Successfuly");
 		}
