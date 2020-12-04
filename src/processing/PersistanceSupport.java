@@ -51,6 +51,7 @@ public class PersistanceSupport {
 			boardFile.toPath(), 
 			boardStateString.getBytes("ISO-8859-1")
 		);
+		System.out.println("ahmed4---------------------------------------");
 	}
 	
 	/**

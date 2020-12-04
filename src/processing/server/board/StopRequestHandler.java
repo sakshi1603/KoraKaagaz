@@ -62,7 +62,10 @@ public class StopRequestHandler implements INotificationHandler {
 			 * for persistence, thus serializing the maps in ClientBoardState
 			 */
 			try {
+				System.out.println("ahmed1------------------------------");
 				persistence = Serialize.serialize(ClientBoardState.maps);
+
+				System.out.println("ahmed2------------------------------");
 			} catch (IOException e) {
 				
 				ClientBoardState.logger.log(
@@ -78,6 +81,8 @@ public class StopRequestHandler implements INotificationHandler {
 			 * Saving the serialized the data in the file with name same as the BoardID.
 			 */
 			try {
+
+				System.out.println("ahmed3------------------------------");
 				PersistanceSupport.storeStateString(persistence, ClientBoardState.boardId);
 			} catch (UnsupportedEncodingException e) {
 				
@@ -125,7 +130,8 @@ public class StopRequestHandler implements INotificationHandler {
 					ClientBoardState.boardId.toString(), 
 					"RemoveBoard"
 			);
-			
+
+			System.out.println("ahmed10	------------------------------");
 			System.exit(0);
 		}
 	}
