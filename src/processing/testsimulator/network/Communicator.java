@@ -61,11 +61,10 @@ public class Communicator implements ICommunicator{
 		} catch (Exception e) {
 			logger.log(
 					ModuleID.PROCESSING, 
-					LogLevel.INFO, 
-					"Test: Handler not present"
+					LogLevel.WARNING, 
+					"Test: Identifier " + identifier + " not found." 
 			);
 		}
-		
 	}
 
 	@Override
