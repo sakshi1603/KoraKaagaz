@@ -8,6 +8,7 @@ import java.io.*;
 
 import processing.utility.*;
 import processing.*;
+import processing.shape.LineDrawer;
 import infrastructure.validation.logger.*;
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class Brush{
 	private static IDrawErase drawerase = ProcessingFactory.getProcessor();
 
 	private static ArrayList<Pixel> pixels=new ArrayList<Pixel>();
+	
+	private static ArrayList<Pixel> tempPixels=new ArrayList<Pixel>();
 
 	private static ArrayList<Position> position =new ArrayList<Position>();
 
@@ -111,13 +114,7 @@ public class Brush{
 		GraphicsContext g,
 		double startx, double starty, double endx, double endy,double size
 	) {
-		g.stroke();
-		g.setLineCap(StrokeLineCap.ROUND);
-		g.setLineWidth(size);
-		g.setStroke(color);
-		g.strokeLine(startx,starty,endx,endy);
-
-		double x = 0, y = 0, m = 0, flag = 0;
+		double x = 0, y = 0, m = 0, flag = 0 , x1 = 0 , y1 = 0;
 
 		/**
 		 * Check if slope is 0 or infinity.
@@ -138,39 +135,40 @@ public class Brush{
 		/**
 		 * Intensity in terms of RGB format
 		 */
-		Intensity i = new Intensity((int) color.getRed()*255,(int) color.getGreen()*255,(int) color.getBlue()*255);
-
+		Intensity i = new Intensity((int) Math.round(color.getRed()*255),(int) Math.round(color.getGreen()*255),(int) Math.round(color.getBlue()*255));
+		
 		/**
-		 * The calculation of pixels
-		 * Outer loop is for every 2 distance for line drawn from (startx , starty) to (endx , endy)
-		 * Inner loop is half the size on both sides of line with distance 1.
-		 * j and k are local loop variables.
+		 * Using the drawsegment to get pixels of the line with the size of brush
 		 */
-		for (
-			int j = 0;
-			j <= (int)(Math.sqrt((endy - starty) * (endy - starty) + (endx - startx) * (endx - startx)));
-			j+=2
-		) {
-			for (int k = (int)(-1 * size/2); k <= (int)(size/2); k+=1) {
-				if (flag == 0) {
-					x = startx + Math.sqrt((j*j)/(m * m + 1)) + ( Math.abs(m * k) * ( Math.sqrt(1/(1 + m * m)) ));
-					y = starty + ( Math.abs(m) * Math.sqrt((j*j)/(m * m + 1))) - ( (1/m) * Math.abs(m * k) * Math.sqrt(1/(1 + m * m)));
-				}
-				else if (flag == 1) {
-					x = startx + k;
-					y = starty + j;
-				}
-				else if (flag == 2) {
-					x = startx + j;
-					y = starty + k;
-				}
-
-				/**
-				 * start point for position
-				 */
-				Position  start = new Position((int) (x),(int) (y));
-				Pixel p1 = new Pixel(start,i);
-				pixels.add(p1);
+		for (int k = (int)(-1 * size/2); k <= (int)(size/2); k+=2) 
+		{
+			if(flag == 0) {
+				x = startx + m * k * Math.sqrt(1/(m * m + 1));
+				y = starty + k * Math.sqrt(1/(m * m + 1));
+				x1 = endx + m * k * Math.sqrt(1/(m * m + 1));
+				y1 = endy + k * Math.sqrt(1/(m * m + 1));
+				
+			}
+			if(flag == 1) {
+				x = startx + k;
+				y = starty ;
+				x1 = endx + k;
+				y1 = endy ;
+			}
+			if(flag == 2) {
+				x = startx;
+				y = starty + k;
+				x1 = endx;
+				y1 = endy + k ;
+			}
+			Position  start = new Position((int) (x),(int) (y));
+			Position  end = new Position((int) (x1),(int) (y1));
+			tempPixels = LineDrawer.drawSegment(start,end,i);
+			pixels.addAll(tempPixels);
+			
+			for(Pixel pix:tempPixels) {
+				Position pos = pix.position;
+				g.getPixelWriter().setColor(pos.r,pos.c,color);
 			}
 		}
 	}
@@ -193,18 +191,12 @@ public class Brush{
 		GraphicsContext g,
 		double startx, double starty, double endx, double endy,double size
 	) {
-		g.stroke();
-		g.setLineCap(StrokeLineCap.ROUND);
-		g.setLineWidth(size);
-		g.setStroke(Color.WHITE);
-		g.strokeLine(startx,starty,endx,endy);
-
 		/**
 		 * Check if slope is 0 or infinity.
 		 * If either is there flag to a certain value
 		 * m = slope
 		 */
-		double x = 0, y = 0, m = 0, flag = 0;
+		double x = 0, y = 0, m = 0, flag = 0 , x1 = 0 , y1 = 0;
 		if (startx == endx) {
 			flag = 1;
 		}
@@ -216,37 +208,44 @@ public class Brush{
 			m = (endy - starty) / (endx - startx);
 		}
 
+		Intensity i = new Intensity(1,1,1);
 		/**
-		 * The calculation of pixels
-		 * Outer loop is for every 2 distance for line drawn from (startx , starty) to (endx , endy)
-		 * Inner loop is half the size on both sides of line with distance 1.
-		 * j and k are local loop variables.
+		 * Using the drawsegment to get pixels of the line with the size of eraser
 		 */
-		for (
-			int j = 0;
-			j <= (int)(Math.sqrt((endy - starty) * (endy - starty) + (endx - startx) * (endx - startx)));
-			j += 2
-		) {
-			for (int k = (int)(-1 * size/2); k <= (int)(size/2); k+=1) {
-				if (flag == 0) {
-					x = startx + Math.sqrt((j*j)/(m * m + 1)) + ( Math.abs(m * k) * ( Math.sqrt(1/(1 + m * m))));
-					y = starty + ( Math.abs(m) * Math.sqrt((j*j)/(m * m + 1))) - ( (1/m) * Math.abs(m * k) * Math.sqrt(1/(1 + m * m)));
-				}
-				else if (flag == 1) {
-					x = startx + k;
-					y = starty + j;
-				}
-				else if (flag == 2) {
-					x = startx + j;
-					y = starty + k;
-				}
-
-				/**
-				 * start point for position
-				 */
-				Position  start = new Position((int) (x),(int) (y));
-				position.add(start);
+		for (int k = (int)(-1 * size/2); k <= (int)(size/2); k+=2) 
+		{
+			if(flag == 0) {
+				x = startx + m * k * Math.sqrt(1/(m * m + 1));
+				y = starty + k * Math.sqrt(1/(m * m + 1));
+				x1 = endx + m * k * Math.sqrt(1/(m * m + 1));
+				y1 = endy + k * Math.sqrt(1/(m * m + 1));
+				
 			}
+			if(flag == 1) {
+				x = startx + k;
+				y = starty ;
+				x1 = endx + k;
+				y1 = endy ;
+			}
+			if(flag == 2) {
+				x = startx;
+				y = starty + k;
+				x1 = endx;
+				y1 = endy + k ;
+			}
+			Position  start = new Position((int) (x),(int) (y));
+			Position  end = new Position((int) (x1),(int) (y1));
+			tempPixels = LineDrawer.drawSegment(start,end,i);
+			pixels.addAll(tempPixels);
+			
+			for(Pixel pix:tempPixels) {
+				Position pos = pix.position;
+				g.getPixelWriter().setColor(pos.r,pos.c,Color.WHITE);
+			}
+		}
+		
+		for(int j=0; j<pixels.size() ;j++) {
+			position.add(pixels.get(j).position);
 		}
 	}
 }
