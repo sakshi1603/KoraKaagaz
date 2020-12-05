@@ -37,6 +37,7 @@ public class CommunicateChange {
 			ArrayList<Pixel> newPixels
 			) {
 		
+		Thread.dumpStack();
 		// stores the set of positions which would have been modified
 		Set <Position> modifiedPos = new HashSet <Position> ();
 		

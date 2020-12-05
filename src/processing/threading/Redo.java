@@ -48,7 +48,7 @@ public class Redo implements Runnable {
             Helper.log(
                 logger,
                 LogLevel.ERROR,
-                "Redo failed"
+                "Redo failed" + e.toString()
             );
         }
     }

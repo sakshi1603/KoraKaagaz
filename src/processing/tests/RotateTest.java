@@ -74,6 +74,12 @@ public class RotateTest extends TestCase {
 		expectedOutput.add(new Pixel(new Position(4,1), intensityA));
 		expectedOutput.add(new Pixel(new Position(4,0), intensityA));
 		
+		Intensity white = new Intensity(255,255,255);
+		expectedOutput.add(new Pixel(new Position(2,2), white));
+		expectedOutput.add(new Pixel(new Position(3,2), white));
+		expectedOutput.add(new Pixel(new Position(5,2), white));
+		expectedOutput.add(new Pixel(new Position(6,2), white));
+		
 		for (int a=2; a<7; a++)
 		{
 			b = 2;
@@ -173,15 +179,16 @@ public class RotateTest extends TestCase {
 		}
 		
 		/* wait till UI receives the output */
-		while (ChangesHandler.receivedOutput == null) {
+		while (ChangesHandler.receivedSelected == null) {
 			try{
 				Thread.sleep(50);
 			 } catch (Exception e) {
 				 // wait until output received
 			 }
 		}
-		
 		ChangesHandler.receivedOutput = null;
+
+		ChangesHandler.receivedSelected = null;
 		
 		/* Call colorChange API of processing module */
 		try {
@@ -207,6 +214,11 @@ public class RotateTest extends TestCase {
 		Set<Pixel> outputSet = new HashSet<Pixel>();
 		outputSet.addAll(ChangesHandler.receivedOutput);
 		
+		for (Pixel pi: ChangesHandler.receivedOutput) {
+			System.out.println(pi.position.r + " " + pi.position.c);
+			System.out.println(pi.intensity.r + " " + pi.intensity.g + pi.intensity.b);
+			
+		}
 		/* check whether the output received is same as expected output */
 		if (inputSet.equals(outputSet)) {
 			logger.log(
@@ -214,8 +226,16 @@ public class RotateTest extends TestCase {
 					LogLevel.SUCCESS,
 					"RotateTest: Successful!."
 			);
-			
 			ChangesHandler.receivedOutput = null;
+			/* wait till UI receives the output */
+			while (ChangesHandler.receivedOutput == null) {
+				try{
+					Thread.sleep(50);
+				 } catch (Exception e) {
+					 // wait until output received
+				 }
+			}
+			
 			return true;
 		} else {
 			setError("Rotate failed. Result does not match expected output.");

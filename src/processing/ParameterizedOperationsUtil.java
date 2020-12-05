@@ -109,11 +109,16 @@ public class ParameterizedOperationsUtil {
 
 		// storing initial intensities of pixels (to be used during undo-operation)
 		ArrayList<Pixel> prevPixelIntensities = new ArrayList<Pixel>();
-		prevPixelIntensities = obj.getPixels();
-
+//		prevPixelIntensities = obj.getPixels();
+		for (Pixel p: obj.getPixels()) {
+			prevPixelIntensities.add(new Pixel(p));
+		}
 		// changing intensities of selected object's pixels
 		ArrayList<Pixel> newPixelSet = new ArrayList<Pixel>();
-		newPixelSet = obj.getPixels();
+//		newPixelSet = obj.getPixels();
+		for (Pixel p: obj.getPixels()) {
+			newPixelSet.add(new Pixel(p));
+		}
 		for (int i = 0; i < newPixelSet.size(); i++) {
 
 			Pixel newPix = new Pixel(newPixelSet.get(i).position, newIntensity);
@@ -184,8 +189,10 @@ public class ParameterizedOperationsUtil {
 
 		// storing initial list of pixels (to be used in creation of new BoardObject)
 		ArrayList<Pixel> prevPixelIntensities = new ArrayList<Pixel>();
-		prevPixelIntensities = obj.getPixels();
-
+//		prevPixelIntensities = obj.getPixels();
+		for(Pixel p: obj.getPixels()) {
+			prevPixelIntensities.add(new Pixel(p));
+		}
 		Position centre = null;
 		try {
 
@@ -232,7 +239,11 @@ public class ParameterizedOperationsUtil {
 
 		// generating new list of object's pixels
 		ArrayList<Pixel> newPixelSet = new ArrayList<Pixel>();
-		newPixelSet = obj.getPixels();
+//		newPixelSet = obj.getPixels();
+		for(Pixel p: obj.getPixels()) {
+			newPixelSet.add(new Pixel(p));
+		}
+		
 		for (int i = 0; i < newPixelSet.size(); i++) {
 
 			// shifting origin
@@ -324,7 +335,7 @@ public class ParameterizedOperationsUtil {
 		try {
 
 			newObj = colorChangeUtil(obj, id, intensity);
-			stackUtil(newObj);
+//			stackUtil(newObj);
 
 			paraOpLogger.log(
 				ModuleID.PROCESSING, 
@@ -348,8 +359,8 @@ public class ParameterizedOperationsUtil {
 			CommunicateChange.provideChanges(newObj.getPrevIntensity(), newObj.getPixels());
 
 			// To send selection updates to UI
-			CommunicateChange.identifierToHandler.get(CommunicateChange.identifierUI)
-				.giveSelectedPixels(newObj.getPixels());
+		//	CommunicateChange.identifierToHandler.get(CommunicateChange.identifierUI)
+			//	.giveSelectedPixels(newObj.getPixels());
 
 			paraOpLogger.log(
 				ModuleID.PROCESSING, 
@@ -384,7 +395,7 @@ public class ParameterizedOperationsUtil {
 		try {
 
 			newObj = rotationUtil(obj, id, angleOfRotation);
-			stackUtil(newObj);
+//			stackUtil(newObj);
 
 			paraOpLogger.log(
 				ModuleID.PROCESSING, 
@@ -408,8 +419,8 @@ public class ParameterizedOperationsUtil {
 			CommunicateChange.provideChanges(newObj.getPrevIntensity(), newObj.getPixels());
 
 			// To send selection updates to UI
-			CommunicateChange.identifierToHandler.get(CommunicateChange.identifierUI)
-				.giveSelectedPixels(newObj.getPixels());
+			//CommunicateChange.identifierToHandler.get(CommunicateChange.identifierUI)
+				//.giveSelectedPixels(newObj.getPixels());
 
 			paraOpLogger.log(
 				ModuleID.PROCESSING, 

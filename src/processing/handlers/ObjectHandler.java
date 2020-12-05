@@ -90,6 +90,10 @@ public class ObjectHandler implements INotificationHandler{
 					Intensity newIntensity = ((ColorChangeOperation)boardOperationType)
 									.getIntensity();
 					
+					System.out.println("handlerrrr");
+					System.out.println(newIntensity.r+ " " + newIntensity.g + " " + newIntensity.b);
+					System.out.println(boardObject.getPixels().get(0).intensity.r + " " + boardObject.getPixels().get(0).intensity.g + " " + boardObject.getPixels().get(0).intensity.b);
+					
 					//Perform color change operation on the BoardObject
 					ParameterizedOperationsUtil.colorChange(
 							boardObject,

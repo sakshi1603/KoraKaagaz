@@ -71,6 +71,7 @@ public class BoardObject implements Serializable {
 	    ObjectId objectId,
 	    Timestamp timestamp,
 	    UserId userId,
+	    ArrayList<Pixel>  prev,
 	    boolean isReset
 	) {
 		LoggerFactory.getLoggerInstance().log(
@@ -86,7 +87,7 @@ public class BoardObject implements Serializable {
 		this.timestamp = timestamp;
 		this.userId = userId;
 		this.isReset = isReset;
-		this.prevPixelIntensities = null;
+		this.prevPixelIntensities = prev;
 	}
 	
 	/** Gets the operation corresponding to this shape */

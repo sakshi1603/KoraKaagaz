@@ -82,6 +82,7 @@ public class UndoRedo {
 				obj.getObjectId(),
 				obj.getTimestamp(),
 				obj.getUserId(),
+				obj.getPrevIntensity(),
 				obj.isResetObject()
 		);
 		
@@ -262,6 +263,12 @@ public class UndoRedo {
 				else {
 					newAngle = new Angle(angleCCW.angle);
 				}
+				logger.log(
+						ModuleID.PROCESSING, 
+						LogLevel.ERROR, 
+						"[#" + Thread.currentThread().getId() + "] "
+						+ "debugger : Undefined Operation type : " + newAngle.angle
+	    				); 
 				newOp = new RotateOperation(newAngle);
 				// return object has the operation to be performed by other clients
 				retObj = duplicateObject(topObj, newOp);
@@ -299,6 +306,8 @@ public class UndoRedo {
     	
     	// Transfers the object from one stack to other
     	addIntoStack(otherStack, topObj);
+    	System.out.println("Stack size : " + otherStack.size());
+    	
     	curStack.remove(curStack.size() - 1);
     	/** 
     	 *  Send the modified pixels to the UI 
@@ -310,12 +319,21 @@ public class UndoRedo {
     	else {
     		CommunicateChange.provideChanges(topObj.getPixels(), null);
     	}
-    	logger.log(
-			ModuleID.PROCESSING, 
-			LogLevel.SUCCESS, 
-			"[#" + Thread.currentThread().getId() + "] "
-			+ "Undo / Redo successfully performed"
-    	); 
+    	if (operation == Operation.UNDO) {
+	    	logger.log(
+				ModuleID.PROCESSING, 
+				LogLevel.SUCCESS, 
+				"[#" + Thread.currentThread().getId() + "] "
+				+ "Undo successfully performed"
+	    	); 
+    	} else {
+    		logger.log(
+    				ModuleID.PROCESSING, 
+    				LogLevel.SUCCESS, 
+    				"[#" + Thread.currentThread().getId() + "] "
+    				+ "Redo successfully performed"
+    	    	);
+    	}
     	return retObj;
 	}
 	
@@ -383,13 +401,13 @@ public class UndoRedo {
 		addIntoStack(ClientBoardState.undoStack, object);
 		
 		// clear the redo stack to maintain consistency
-		ClientBoardState.redoStack.clear();
+//		ClientBoardState.redoStack.clear();
 		
 		logger.log(
 			ModuleID.PROCESSING, 
 			LogLevel.SUCCESS, 
 			"[#" + Thread.currentThread().getId() + "] "
-			+ "Object pushed into the Undo stack"
+			+ "Object pushed into the Undo stack1"
 		);
 	   
 		/** 

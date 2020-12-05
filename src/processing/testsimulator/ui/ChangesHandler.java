@@ -22,7 +22,7 @@ public class ChangesHandler implements IChanges{
 	
 	/* Stores the received output by processor module */
 	public static ArrayList<Pixel> receivedOutput = null; 
-	
+	public static ArrayList<Pixel> receivedSelected = null;
 	@Override
 	public void getChanges(ArrayList<Pixel> pixels) {
 		
@@ -43,7 +43,7 @@ public class ChangesHandler implements IChanges{
 				LogLevel.INFO, 
 				"Test: UI received the selectedPixels passed by processor.");
 		/* set the receivedOutput variable */ 
-		receivedOutput = pixels;
+		receivedSelected = pixels;
 		return;
 	}
 

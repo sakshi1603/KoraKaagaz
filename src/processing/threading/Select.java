@@ -44,7 +44,7 @@ public class Select implements Runnable {
         try {
             logger = LoggerFactory.getLoggerInstance();
             this.selectedObjectPixels = SelectDelete.select(inputPositions);
-
+            
             Helper.log(
                 logger,
                 LogLevel.INFO,

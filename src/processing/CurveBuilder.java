@@ -38,9 +38,10 @@ public class CurveBuilder {
 				newobjectId,
 				newtimestamp,
 				newuserId,
+				prevPixelIntensity,
 				reset
 		);
-				
+		
 		//set operation of the created object
 		curveObj.setOperation(newboardOp);
 		
@@ -122,6 +123,7 @@ public class CurveBuilder {
 				newobjectId,
 				newtimestamp,
 				newuserId,
+				null,
 				reset
 		);
 		

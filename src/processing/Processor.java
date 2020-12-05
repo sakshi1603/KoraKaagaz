@@ -25,7 +25,7 @@ public class Processor implements IDrawErase, IDrawShapes, IOperation, IUndoRedo
 	@Override
 	public void drawCurve (ArrayList <Pixel> pixels) {
 		
-		if(pixels == null) {
+		if (pixels == null) {
 			
 			ClientBoardState.logger.log(
 					ModuleID.PROCESSING, 
@@ -52,7 +52,6 @@ public class Processor implements IDrawErase, IDrawShapes, IOperation, IUndoRedo
 	
 	@Override
 	public void erase (ArrayList <Position> position) {
-		
 		if(position == null) {
 			
 			ClientBoardState.logger.log(
@@ -100,7 +99,7 @@ public class Processor implements IDrawErase, IDrawShapes, IOperation, IUndoRedo
 	
 	@Override
 	public void drawSquare(Pixel start, float length) {
-		
+
 		if (start == null) {
 			
 			ClientBoardState.logger.log(
@@ -279,7 +278,8 @@ public class Processor implements IDrawErase, IDrawShapes, IOperation, IUndoRedo
 			);
 			return;
 		}
-		
+		System.out.println(intensity.r + intensity.g+ intensity.b);
+
 		try {
 			selectThread.join();
 		} catch (InterruptedException e) {
