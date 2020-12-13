@@ -65,6 +65,7 @@ public class RotateTest extends TestCase {
 		
 		/* expected output*/
 		ArrayList<Pixel> expectedOutput = new ArrayList<Pixel>();		
+		Intensity white = new Intensity(255, 255, 255);
 		Angle rotateBy = new Angle(90);
 		
 		/* rotate by 90 */
@@ -73,14 +74,18 @@ public class RotateTest extends TestCase {
 		expectedOutput.add(new Pixel(new Position(4,2), intensityA));
 		expectedOutput.add(new Pixel(new Position(4,1), intensityA));
 		expectedOutput.add(new Pixel(new Position(4,0), intensityA));
-		
+		expectedOutput.add(new Pixel(new Position(2,2), white));
+		expectedOutput.add(new Pixel(new Position(3,2), white));
+		expectedOutput.add(new Pixel(new Position(5,2), white));
+		expectedOutput.add(new Pixel(new Position(6,2), white));
+	
 		for (int a=2; a<7; a++)
 		{
 			b = 2;
 			pos = new Position(a, b);
 			pixel  = new Pixel(pos, intensityA);
 			objectA.add(pixel);
-
+			
 			pos = new Position(a, b+1);
 			pixel = new Pixel(pos, intensityB);
 			objectB.add(pixel);
@@ -206,6 +211,10 @@ public class RotateTest extends TestCase {
 		inputSet.addAll(expectedOutput);
 		Set<Pixel> outputSet = new HashSet<Pixel>();
 		outputSet.addAll(ChangesHandler.receivedOutput);
+		
+		for (Pixel p: ChangesHandler.receivedOutput) {
+			System.out.println(p.position.r + " " + p.position.c + " " + p.intensity.r + " " + p.intensity.g + " " + p.intensity.b);
+		}
 		
 		/* check whether the output received is same as expected output */
 		if (inputSet.equals(outputSet)) {

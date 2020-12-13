@@ -99,6 +99,10 @@ public class ResetTest extends TestCase {
 		ArrayList<Pixel> objectB = new ArrayList<Pixel>();
 		/* intensity for object B */
 		Intensity intensityB = new Intensity(10, 12, 14);
+	
+		/* expected output after reset operation */
+		ArrayList<Pixel> resetObject = new ArrayList<Pixel>();
+		Intensity white = new Intensity(255, 255, 255);
 		
 		for (int a=40; a<60; a++)
 		{
@@ -106,10 +110,12 @@ public class ResetTest extends TestCase {
 			pos = new Position(a, b);
 			pixel  = new Pixel(pos, intensityA);
 			objectA.add(pixel);
+			resetObject.add(new Pixel(pos, white));
 			
 			pos = new Position(b,a);
 			pixel = new Pixel(pos, intensityB);
 			objectB.add(pixel);
+			resetObject.add(new Pixel(pos, white));
 		}
 		
 		/* Initialize the variables in Processor Module */
@@ -218,7 +224,6 @@ public class ResetTest extends TestCase {
 		}
 		
 		Set<Pixel> inputSet = new HashSet<Pixel>();
-		ArrayList<Pixel> resetObject = createOutputForReset();
 		inputSet.addAll(resetObject);
 		Set<Pixel> outputSet = new HashSet<Pixel>();
 		outputSet.addAll(ChangesHandler.receivedOutput);
